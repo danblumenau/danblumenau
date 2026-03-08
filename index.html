@@ -2,7 +2,7 @@
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Dan Blumenau | Casting Director</title>
     <meta name="description" content="Dan Blumenau: Casting Director, former ice hockey player and once upon a time cartoon character.">
     
@@ -32,12 +32,12 @@
                         deco: ['"Josefin Sans"', 'sans-serif'],
                     },
                     colors: {
-                        pearl: '#FDFBF7',    // Warm, luxurious cream background
-                        sand: '#F0EAD6',     // Slightly deeper cream for contrast
-                        coral: '#DE6B48',    // Classic Deco Coral/Terracotta
-                        seafoam: '#7EAC9A',  // Classic Deco Mint/Seafoam
-                        brass: '#D4AF37',    // Elegant Gold/Brass
-                        midnight: '#1A2A3A'  // Deep Navy for text (softer than black)
+                        pearl: '#FDFBF7',    
+                        sand: '#F0EAD6',     
+                        coral: '#DE6B48',    
+                        seafoam: '#7EAC9A',  
+                        brass: '#D4AF37',    
+                        midnight: '#1A2A3A'  
                     }
                 }
             }
@@ -47,18 +47,28 @@
     <style>
         body { background-color: #FDFBF7; color: #1A2A3A; overflow-x: hidden; }
         
-        /* Reveal Animations */
+        /* Reveal Animations (Scroll Observer) */
         .reveal { opacity: 0; transform: translateY(20px); transition: all 1s cubic-bezier(0.25, 1, 0.5, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         .delay-100 { transition-delay: 100ms; }
         .delay-200 { transition-delay: 200ms; }
         
+        @media (min-width: 768px) {
+            .md\:delay-100 { transition-delay: 100ms; }
+            .md\:delay-200 { transition-delay: 200ms; }
+            .md\:delay-300 { transition-delay: 300ms; }
+        }
+
         /* Art Deco Borders & Elements */
         .deco-border {
             position: relative;
             border: 1px solid #1A2A3A;
-            padding: 2rem;
+            padding: 1.25rem;
         }
+        @media (min-width: 768px) {
+            .deco-border { padding: 2rem; }
+        }
+        
         .deco-border::before {
             content: ''; position: absolute; top: 6px; left: 6px; right: 6px; bottom: 6px;
             border: 1px solid rgba(26, 42, 58, 0.2); pointer-events: none;
@@ -74,20 +84,19 @@
             width: 8px; height: 8px; transform: rotate(45deg); background-color: #DE6B48;
         }
 
-        /* Image Styling */
-        .arch-img {
-            border-top-left-radius: 9999px;
-            border-top-right-radius: 9999px;
+        /* Rectangular Poster Image Styling */
+        .poster-container {
             overflow: hidden;
             position: relative;
             border: 2px solid #1A2A3A;
             background-color: #1A2A3A;
+            isolation: isolate;
         }
-        .arch-img img {
+        .poster-container img {
             transition: transform 0.8s ease, filter 0.8s ease;
             filter: sepia(20%) contrast(1.1);
         }
-        .group:hover .arch-img img {
+        .group:hover .poster-container img {
             transform: scale(1.05);
             filter: sepia(0%) contrast(1.1);
         }
@@ -107,17 +116,41 @@
             width: 100%;
             height: 100%;
             border: 2px solid #1A2A3A;
+            -webkit-mask-image: -webkit-radial-gradient(white, black);
+            isolation: isolate;
         }
 
-        /* Form Inputs */
+        /* Form Inputs - Mobile Safari Fixes */
         .deco-input {
-            width: 100%; background: #F0EAD6; border: 1px solid #1A2A3A;
-            padding: 1rem 1.5rem; font-family: '"Montserrat"', sans-serif; color: #1A2A3A; 
-            outline: none; transition: border-color 0.3s ease, box-shadow 0.3s ease; 
-            font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase;
+            width: 100%; 
+            background: #F0EAD6; 
+            border: 1px solid #1A2A3A;
+            padding: 1rem 1.5rem; 
+            font-family: '"Montserrat"', sans-serif; 
+            color: #1A2A3A; 
+            outline: none; 
+            transition: border-color 0.3s ease, box-shadow 0.3s ease; 
+            font-size: 16px; /* Prevents iOS Safari zoom */
+            letter-spacing: 0.1em; 
+            text-transform: uppercase;
+            -webkit-appearance: none;
+            appearance: none;
+            border-radius: 0;
+        }
+        @media (min-width: 768px) {
+            .deco-input { font-size: 0.85rem; }
         }
         .deco-input:focus { border-color: #DE6B48; box-shadow: 4px 4px 0px #DE6B48; }
         .deco-input::placeholder { color: #718096; }
+
+        /* Custom Select Arrow for iOS */
+        select.deco-input {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%231A2A3A'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2rem;
+            padding-right: 2.5rem;
+        }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
@@ -126,380 +159,294 @@
         ::-webkit-scrollbar-thumb:hover { background: #DE6B48; }
     </style>
 </head>
-<body class="antialiased selection:bg-coral selection:text-pearl">
+<body class="antialiased selection:bg-coral selection:text-pearl flex flex-col min-h-screen">
 
     <!-- Header -->
-    <header class="fixed top-0 w-full z-50 bg-pearl/95 backdrop-blur-sm border-b-2 border-midnight transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="font-deco text-3xl font-bold tracking-widest text-midnight uppercase">DB.</a>
+    <header class="fixed top-0 w-full z-50 bg-pearl/95 backdrop-blur-sm border-b-2 border-midnight transition-all duration-300 h-[72px]">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 h-full flex justify-between items-center">
+            <a href="#home" class="font-deco text-2xl md:text-3xl font-bold tracking-widest text-midnight uppercase">DB.</a>
             
             <div class="hidden md:flex space-x-10 font-sans text-xs font-semibold tracking-[0.2em] uppercase text-midnight">
                 <a href="#bio" class="hover:text-coral transition-colors">Bio</a>
                 <a href="#hubs" class="hover:text-brass transition-colors">Hubs</a>
                 <a href="#credits" class="hover:text-seafoam transition-colors">Credits</a>
-                <a href="#experience" class="hover:text-coral transition-colors">Experience</a>
+                <a href="#experience" class="hover:text-coral transition-colors">Highlights</a>
             </div>
             
             <a href="#contact" class="hidden md:inline-block px-8 py-3 bg-midnight text-pearl font-sans text-xs font-bold tracking-[0.2em] uppercase hover:bg-coral transition-colors duration-300">
                 Contact
             </a>
 
-            <button id="mobile-menu-btn" class="md:hidden text-midnight focus:outline-none">
+            <button id="mobile-menu-btn" class="md:hidden text-midnight focus:outline-none p-1">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 8h16M4 16h16"></path></svg>
             </button>
         </div>
     </header>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 bg-sand z-40 flex flex-col justify-center items-center opacity-0 pointer-events-none transition-opacity duration-300">
-        <button id="close-menu-btn" class="absolute top-8 right-8 text-midnight">
+    <div id="mobile-menu" class="fixed inset-0 bg-sand z-[60] flex flex-col justify-center items-center opacity-0 pointer-events-none transition-opacity duration-300">
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-midnight p-2">
             <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
-        <div class="flex flex-col space-y-10 text-center font-deco text-3xl font-bold tracking-[0.2em] uppercase">
+        <div class="flex flex-col space-y-10 text-center font-deco text-2xl sm:text-3xl font-bold tracking-[0.2em] uppercase">
+            <a href="#home" class="mobile-link text-midnight hover:text-coral transition-colors">Home</a>
             <a href="#bio" class="mobile-link text-midnight hover:text-coral transition-colors">Bio</a>
             <a href="#hubs" class="mobile-link text-midnight hover:text-brass transition-colors">Hubs</a>
             <a href="#credits" class="mobile-link text-midnight hover:text-seafoam transition-colors">Credits</a>
-            <a href="#experience" class="mobile-link text-midnight hover:text-coral transition-colors">Experience</a>
+            <a href="#experience" class="mobile-link text-midnight hover:text-coral transition-colors">Highlights</a>
             <a href="#contact" class="mobile-link text-midnight hover:text-seafoam transition-colors">Contact</a>
         </div>
     </div>
 
-    <!-- Hero Section -->
-    <section id="home" class="min-h-[85vh] flex flex-col justify-center items-center px-6 pt-32 pb-16 relative">
-        <!-- Deco Geometric Corner Accents -->
-        <div class="absolute top-32 left-8 md:left-16 w-16 h-16 border-t-2 border-l-2 border-midnight/20"></div>
-        <div class="absolute top-32 right-8 md:right-16 w-16 h-16 border-t-2 border-r-2 border-midnight/20"></div>
-        <div class="absolute bottom-16 left-8 md:left-16 w-16 h-16 border-b-2 border-l-2 border-midnight/20"></div>
-        <div class="absolute bottom-16 right-8 md:right-16 w-16 h-16 border-b-2 border-r-2 border-midnight/20"></div>
+    <!-- Main Content Wrapper (Clears Header) -->
+    <main class="flex-grow pt-[72px]">
 
-        <div class="w-full max-w-5xl mx-auto text-center reveal deco-border bg-white shadow-[8px_8px_0px_#D4AF37]">
-            <p class="font-sans text-xs md:text-sm uppercase tracking-[0.3em] text-coral font-bold mb-6">
-                LONDON | PARIS | MANCHESTER
-            </p>
-            
-            <h1 class="font-deco text-6xl md:text-[7rem] leading-[0.9] tracking-tighter uppercase mb-6 text-midnight">
-                Dan<br/>Blumenau
-            </h1>
-            
-            <div class="deco-line mb-8">
-                <span></span><div></div><span></span>
-            </div>
+        <!-- Hero Section -->
+        <section id="home" class="min-h-[calc(100svh-72px)] flex flex-col justify-center items-center px-4 md:px-6 py-16 relative">
+            <!-- Deco Geometric Corner Accents -->
+            <div class="hidden md:block absolute top-16 left-8 md:left-16 w-16 h-16 border-t-2 border-l-2 border-midnight/20"></div>
+            <div class="hidden md:block absolute top-16 right-8 md:right-16 w-16 h-16 border-t-2 border-r-2 border-midnight/20"></div>
+            <div class="hidden md:block absolute bottom-16 left-8 md:left-16 w-16 h-16 border-b-2 border-l-2 border-midnight/20"></div>
+            <div class="hidden md:block absolute bottom-16 right-8 md:right-16 w-16 h-16 border-b-2 border-r-2 border-midnight/20"></div>
 
-            <p class="font-sans text-base md:text-lg text-midnight font-medium uppercase tracking-widest max-w-2xl mx-auto mb-4 px-4">
-                Casting Director
-            </p>
-            
-            <div class="flex flex-col sm:flex-row justify-center gap-6 px-4">
-                <a href="#bio" class="px-8 py-4 bg-midnight text-pearl font-sans text-xs font-bold tracking-[0.2em] uppercase hover:bg-coral transition-colors">
-                    Read Biography
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Bio & Headshot Section -->
-    <section id="bio" class="py-24 px-6 md:px-12 bg-sand border-t-2 border-midnight relative overflow-hidden">
-        <!-- Background geometric shapes -->
-        <div class="absolute top-0 right-0 w-64 h-full bg-seafoam/10 pointer-events-none hidden lg:block"></div>
-        <div class="absolute bottom-0 left-0 w-1/3 h-1/2 bg-coral/5 pointer-events-none rounded-tr-full"></div>
-
-        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center relative z-10">
-            
-            <!-- Headshot -->
-            <div class="lg:col-span-5 reveal">
-                <div class="headshot-container aspect-[3/4] max-w-md mx-auto bg-pearl shadow-[12px_12px_0px_#1A2A3A]">
-                    <div class="headshot-inner bg-midnight">
-                        <!-- Headshot Image: Updated via Script at bottom -->
-                        <img id="img-headshot" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" alt="Dan Blumenau" class="w-full h-full object-cover">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Biography Text -->
-            <div class="lg:col-span-7 reveal delay-100">
-                <h2 class="font-deco text-4xl md:text-5xl font-bold uppercase tracking-widest mb-8 text-midnight">Profile</h2>
-                
-                <div class="font-sans text-sm md:text-base text-midnight/80 font-light leading-relaxed space-y-6 mb-10">
-                    <p>
-                        Dan Blumenau is an established Casting Director with a primary focus on finding talent for the West End, highly anticipated UK tours, avant-garde spectacles, and luxury international cruise lines. Serving as an Associate Casting Director with Debbie O'Brien Casting in London for nearly two decades, Dan has been instrumental in shaping the casts of some of the most celebrated and long-running productions worldwide.
-                    </p>
-                    <p>
-                        His extensive portfolio expertly balances legendary powerhouse musicals with dynamic modern hits. With Debbie O'Brien he has cast iconic properties such as <em>Thriller Live</em>, <em>Priscilla Queen of the Desert</em>, and <em>The Snowman</em>, alongside contemporary successes like <em>Priscilla The Party</em> and the Olivier-nominated <em>The Choir of Man</em>. His keen eye for specialised talent has also led to work on major UK Tours, casting high-octane, dance-heavy shows including <em>Burn the Floor</em>, <em>Cacophony</em>, and <em>Flashdance</em>.
-                    </p>
-                    <p>
-                        With native bilingual fluency, Dan possesses a unique and highly sought-after advantage in European markets. He regularly facilitates international casting, spearheading pivotal London and Paris auditions for major continental productions. Notable highlights include casting the visionary <em>Jean Paul Gaultier's Fashion Freak Show</em> and the legendary <em>Starlight Express (Bochum)</em>. His expansive reach extends further into television and recorded media, having contributed to the BBC's <em>So You Think You Can Dance</em>.
-                    </p>
-                    <p>
-                        In the luxury cruise sector, Dan operates dedicated, high-volume audition hubs across the UK and Europe—spanning London, Glasgow, and Paris—delivering world-class performers for global entertainment leaders including Norwegian Cruise Lines, AIDA Cruises, Crystal Cruises, and Holland America Line. His rigorous operational background ensures every casting process is executed with absolute precision.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Audition Hubs (Deco Badges) -->
-    <section id="hubs" class="py-24 px-6 md:px-12 bg-pearl border-y-2 border-midnight">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16 reveal">
-                <h2 class="font-deco text-4xl font-bold uppercase tracking-widest text-midnight mb-4">Audition Hubs</h2>
-                <div class="w-16 h-1 bg-coral mx-auto"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-                <!-- London -->
-                <div class="reveal">
-                    <div class="w-24 h-24 mx-auto mb-6 rounded-full border-4 border-seafoam p-2">
-                        <div class="w-full h-full bg-midnight rounded-full flex items-center justify-center text-pearl font-deco text-2xl font-bold">LON</div>
-                    </div>
-                    <h3 class="font-deco text-2xl font-bold uppercase mb-2">London</h3>
-                </div>
-
-                <!-- Manchester -->
-                <div class="reveal delay-100">
-                    <div class="w-24 h-24 mx-auto mb-6 rounded-full border-4 border-brass p-2">
-                        <div class="w-full h-full bg-midnight rounded-full flex items-center justify-center text-pearl font-deco text-2xl font-bold">PAR</div>
-                    </div>
-                    <h3 class="font-deco text-2xl font-bold uppercase mb-2">Paris</h3>
-                </div>
-
-                <!-- Paris -->
-                <div class="reveal delay-200">
-                    <div class="w-24 h-24 mx-auto mb-6 rounded-full border-4 border-coral p-2">
-                        <div class="w-full h-full bg-midnight rounded-full flex items-center justify-center text-pearl font-deco text-2xl font-bold">MCR</div>
-                    </div>
-                    <h3 class="font-deco text-2xl font-bold uppercase mb-2">Manchester</h3>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Selected Credits (Deco Gallery) -->
-    <section id="credits" class="py-32 px-6 md:px-12 bg-pearl">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-20 reveal">
-                <h2 class="font-deco text-5xl font-bold tracking-widest uppercase mb-6 text-midnight">Selected Credits</h2>
-                <div class="deco-line mb-4">
-                    <span></span><div></div><span></span>
-                </div>
-            </div>
-
-            <!-- Dynamic Gallery Grid (Populated via JavaScript at the bottom) -->
-            <div id="dynamic-credits-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-                <!-- Items will be automatically injected here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Timeline (Exact CV Alignment) -->
-    <section id="experience" class="py-32 px-6 md:px-12 bg-midnight text-pearl relative border-y-8 border-seafoam">
-        
-        <div class="max-w-5xl mx-auto relative z-10">
-            <div class="text-center mb-24 reveal">
-                <h2 class="font-deco text-5xl font-bold tracking-widest uppercase mb-6 text-pearl">Experience</h2>
-                <div class="w-16 h-1 bg-coral mx-auto"></div>
-            </div>
-
-            <div class="space-y-16">
-                <!-- Timeline Item: Sterling Paris -->
-                <div class="reveal flex flex-col md:flex-row gap-8 items-start border-b border-pearl/20 pb-16">
-                    <div class="w-full md:w-1/3">
-                        <p class="font-deco text-2xl font-bold text-coral uppercase">Feb 2022 &mdash; Present</p>
-                        <p class="font-sans text-xs uppercase tracking-[0.2em] mt-2 opacity-70">London, England</p>
-                    </div>
-                    <div class="w-full md:w-2/3">
-                        <h3 class="font-deco text-4xl font-bold uppercase mb-2">Sterling Paris</h3>
-                        <p class="font-sans text-sm uppercase tracking-[0.2em] font-bold text-seafoam mb-6">Producer</p>
-                        <ul class="font-sans text-sm font-light space-y-3 opacity-90">
-                            <li><strong class="font-medium text-pearl">Mamma Mia! The Party</strong> &mdash; Commercial Consultant</li>
-                            <li><strong class="font-medium text-pearl">The Standard Short Long Drop</strong> &mdash; General Manager</li>
-                            <li><strong class="font-medium text-pearl">Starcrossed</strong> &mdash; Associate General Manager</li>
-                            <li><strong class="font-medium text-pearl">Stand Up Londres</strong> &mdash; Producer</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Timeline Item: Debbie O'Brien -->
-                <div class="reveal flex flex-col md:flex-row gap-8 items-start border-b border-pearl/20 pb-16">
-                    <div class="w-full md:w-1/3">
-                        <p class="font-deco text-2xl font-bold text-seafoam uppercase">Sep 2005 &mdash; Present</p>
-                    </div>
-                    <div class="w-full md:w-2/3">
-                        <h3 class="font-deco text-4xl font-bold uppercase mb-2">Debbie O'Brien Casting</h3>
-                        <p class="font-sans text-sm uppercase tracking-[0.2em] font-bold text-coral mb-8">Associate Casting Director &bull; London</p>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8 font-sans text-sm font-light opacity-90">
-                            <div>
-                                <h4 class="font-bold text-seafoam uppercase tracking-widest text-xs mb-3">West End</h4>
-                                <ul class="space-y-2">
-                                    <li>&bull; Thriller Live</li>
-                                    <li>&bull; Priscilla Queen of the Desert</li>
-                                    <li>&bull; Flashdance <span class="italic text-xs opacity-70 block pl-3">- London and Paris auditions</span></li>
-                                    <li>&bull; Priscilla The Party</li>
-                                    <li>&bull; The Snowman</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-seafoam uppercase tracking-widest text-xs mb-3">UK Tours</h4>
-                                <ul class="space-y-2">
-                                    <li>&bull; Burn the Floor</li>
-                                    <li>&bull; Cacophony</li>
-                                    <li>&bull; Flashdance</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-seafoam uppercase tracking-widest text-xs mb-3">Other London, Regional & Intl</h4>
-                                <ul class="space-y-2">
-                                    <li>&bull; Jean Paul Gaultier's Fashion Freak Show</li>
-                                    <li>&bull; Starlight Express (Bochum) <span class="italic text-xs opacity-70 block pl-3">- London and Paris auditions</span></li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-seafoam uppercase tracking-widest text-xs mb-3">Cruise Companies</h4>
-                                <ul class="space-y-2">
-                                    <li>&bull; Aida Cruises <span class="italic text-xs opacity-70 block pl-3">- London and Paris auditions</span></li>
-                                    <li>&bull; Norwegian Cruise Lines <span class="italic text-xs opacity-70 block pl-3">- London and Glasgow auditions</span></li>
-                                    <li>&bull; Crystal Cruises</li>
-                                    <li>&bull; Holland America Line</li>
-                                </ul>
-                            </div>
-                            <div class="sm:col-span-2">
-                                <h4 class="font-bold text-seafoam uppercase tracking-widest text-xs mb-3">Recorded Media</h4>
-                                <ul class="space-y-2">
-                                    <li>&bull; So You Think You Can Dance <span class="italic text-xs opacity-70">(BBC)</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Timeline Item: Disneyland Paris -->
-                <div class="reveal flex flex-col md:flex-row gap-8 items-start border-b border-pearl/20 pb-16">
-                    <div class="w-full md:w-1/3">
-                        <p class="font-deco text-2xl font-bold text-brass uppercase">Sep 2017 &mdash; Feb 2023</p>
-                        <p class="font-sans text-xs uppercase tracking-[0.2em] mt-2 opacity-70">Paris, France</p>
-                        <p class="font-sans text-xs uppercase tracking-[0.2em] mt-1 text-brass font-bold">11 Years Total</p>
-                    </div>
-                    <div class="w-full md:w-2/3">
-                        <h3 class="font-deco text-4xl font-bold uppercase mb-2">Disneyland Paris</h3>
-                        <div class="mb-6">
-                            <p class="font-sans text-sm uppercase tracking-[0.2em] font-bold text-seafoam">Financial Analyst</p>
-                            <p class="font-sans text-xs opacity-60 mt-1">Jan 2020 &mdash; Feb 2023</p>
-                        </div>
-                        <div class="mb-6">
-                            <p class="font-sans text-sm uppercase tracking-[0.2em] font-bold text-seafoam">Junior Financial Analyst</p>
-                            <p class="font-sans text-xs opacity-60 mt-1">Sep 2017 &mdash; Jan 2020</p>
-                        </div>
-                        <ul class="font-sans text-sm font-light space-y-2 opacity-90">
-                            <li>&bull; Hotels Division</li>
-                            <li>&bull; Buffalo Bill's Wild West Show</li>
-                            <li>&bull; Finance Innovation Committee Member</li>
-                            <li>&bull; Disney Village</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Timeline Item: Other Experience -->
-                <div class="reveal flex flex-col md:flex-row gap-8 items-start">
-                    <div class="w-full md:w-1/3">
-                        <p class="font-deco text-2xl font-bold text-coral uppercase">2003 &mdash; 2017</p>
-                    </div>
-                    <div class="w-full md:w-2/3">
-                        <h3 class="font-deco text-4xl font-bold uppercase mb-8">Other Experience</h3>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10">
-                            <div>
-                                <h4 class="font-deco text-2xl font-bold uppercase mb-1">Voice Actor</h4>
-                                <p class="font-sans text-[0.65rem] uppercase tracking-[0.1em] text-seafoam mb-2">2012–2017 &bull; Paris</p>
-                                <p class="font-sans text-sm font-light opacity-90 italic">"Yes, it's true... I voiced a little, blue alien in English and French..."</p>
-                            </div>
-                            <div>
-                                <h4 class="font-deco text-2xl font-bold uppercase mb-1">Freelance Producer</h4>
-                                <p class="font-sans text-[0.65rem] uppercase tracking-[0.1em] text-coral mb-2">2009–2013</p>
-                                <p class="font-sans text-sm font-light opacity-90">Producer</p>
-                            </div>
-                            <div>
-                                <h4 class="font-deco text-2xl font-bold uppercase mb-1">The Gordon Craig Theatre</h4>
-                                <p class="font-sans text-[0.65rem] uppercase tracking-[0.1em] text-brass mb-2">2005–2008 &bull; Stevenage</p>
-                                <p class="font-sans text-sm font-light opacity-90">Press and Publicity Coordinator</p>
-                            </div>
-                            <div>
-                                <h4 class="font-deco text-2xl font-bold uppercase mb-1">SCA Management</h4>
-                                <p class="font-sans text-[0.65rem] uppercase tracking-[0.1em] text-seafoam mb-2">2003–2005</p>
-                                <p class="font-sans text-sm font-light opacity-90">Assistant Agent</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Inquiries / Contact Form -->
-    <section id="contact" class="py-32 px-6 md:px-12 bg-sand">
-        <div class="max-w-4xl mx-auto deco-border bg-white shadow-[12px_12px_0px_#1A2A3A]">
-            
-            <div class="text-center mb-16 reveal">
-                <h2 class="font-deco text-4xl md:text-5xl font-bold uppercase tracking-tight mb-4 text-midnight">
-                    Contact
-                </h2>
-                <div class="deco-line mb-6">
-                    <span></span><div></div><span></span>
-                </div>
-                <p class="font-sans text-sm text-midnight/70 font-light max-w-md mx-auto">
-                    Get in touch below!
+            <div class="w-full max-w-5xl mx-auto text-center reveal deco-border bg-white shadow-[6px_6px_0px_#D4AF37] md:shadow-[8px_8px_0px_#D4AF37]">
+                <p class="font-sans text-[0.65rem] sm:text-xs md:text-sm uppercase tracking-[0.2em] sm:tracking-[0.3em] text-coral font-bold mb-4 md:mb-6">
+                    LONDON | PARIS | MANCHESTER
                 </p>
+                
+                <h1 class="font-deco text-5xl sm:text-6xl md:text-[7rem] leading-[0.9] tracking-tighter uppercase mb-4 md:mb-6 text-midnight break-words">
+                    Dan<br/>Blumenau
+                </h1>
+                
+                <div class="deco-line mb-6 md:mb-8">
+                    <span></span><div></div><span></span>
+                </div>
+
+                <p class="font-sans text-sm md:text-lg text-midnight font-medium uppercase tracking-widest max-w-2xl mx-auto mb-6 px-2 md:px-4">
+                    Casting Director
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-4 px-2">
+                    <a href="#bio" class="px-6 py-4 md:px-8 bg-midnight text-pearl font-sans text-xs font-bold tracking-[0.2em] uppercase hover:bg-coral transition-colors">
+                        Read Biography
+                    </a>
+                </div>
             </div>
+        </section>
 
-            <div class="reveal delay-100 px-4 md:px-12 pb-8">
-                <!-- Contact Form Only (Direct email and phone removed as requested) -->
-                <form action="https://api.web3forms.com/submit" method="POST" class="space-y-8">
-                    <!-- INSTRUCTION: Replace with your actual Web3Forms Access Key -->
-                    <input type="hidden" name="access_key" value="05261b2c-45de-41d0-b402-1c4d9bfe3399">
-                    <input type="hidden" name="subject" value="New Inquiry">
-                    <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+        <!-- Bio & Headshot Section -->
+        <section id="bio" class="py-20 md:py-24 px-4 sm:px-6 md:px-12 bg-sand relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-full bg-seafoam/10 pointer-events-none hidden lg:block"></div>
+            <div class="absolute bottom-0 left-0 w-1/3 h-1/2 bg-coral/5 pointer-events-none rounded-tr-full hidden md:block"></div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div>
-                            <input type="text" name="name" required class="deco-input" placeholder="Full Name">
-                        </div>
-                        <div>
-                            <input type="text" name="company" class="deco-input" placeholder="Company / Production">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16 items-center relative z-10">
+                <div class="lg:col-span-5 reveal">
+                    <div class="headshot-container aspect-[3/4] max-w-[280px] sm:max-w-md mx-auto bg-pearl shadow-[8px_8px_0px_#1A2A3A] md:shadow-[12px_12px_0px_#1A2A3A]">
+                        <div class="headshot-inner bg-midnight">
+                            <img id="img-headshot" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" alt="Dan Blumenau" class="w-full h-full object-cover">
                         </div>
                     </div>
+                </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div>
-                            <input type="email" name="email" required class="deco-input" placeholder="Email Address">
-                        </div>
-                        <div>
-                            <select name="subject" class="deco-input cursor-pointer" required>
-                                <option value="" disabled selected>Location</option>
-                                <option value="Casting">London</option>
-                                <option value="Production">Paris</option>
-                                <option value="Production">Manchester</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
+                <div class="lg:col-span-7 reveal md:delay-100">
+                    <h2 class="font-deco text-4xl md:text-5xl font-bold uppercase tracking-widest mb-6 md:mb-8 text-midnight text-center lg:text-left">Profile</h2>
+                    <div class="font-sans text-sm md:text-base text-midnight/80 font-light leading-relaxed space-y-6 mb-8">
+                        <p>
+                            Dan Blumenau is an established Casting Director with a primary focus on finding talent for the West End, highly anticipated UK tours, avant-garde spectacles, and luxury international cruise lines. Serving as an Associate Casting Director with Debbie O'Brien Casting in London for nearly two decades, Dan has been instrumental in shaping the casts of some of the most celebrated and long-running productions worldwide.
+                        </p>
+                        <p>
+                            His extensive portfolio expertly balances legendary powerhouse musicals with dynamic modern hits. With Debbie O'Brien he has cast iconic properties such as <em>Thriller Live</em>, <em>Priscilla Queen of the Desert</em>, and <em>The Snowman</em>, alongside contemporary successes like <em>Priscilla The Party</em> and the Olivier-nominated <em>The Choir of Man</em>. His keen eye for specialised talent has also led to work on major UK Tours, casting high-octane, dance-heavy shows including <em>Burn the Floor</em>, <em>Cacophony</em>, and <em>Flashdance</em>.
+                        </p>
+                        <p>
+                            With native bilingual fluency, Dan possesses a unique and highly sought-after advantage in European markets. He regularly facilitates international casting, spearheading pivotal London and Paris auditions for major continental productions. Notable highlights include casting the visionary <em>Jean Paul Gaultier's Fashion Freak Show</em> and the legendary <em>Starlight Express (Bochum)</em>. His expansive reach extends further into television and recorded media, having contributed to the BBC's <em>So You Think You Can Dance</em>.
+                        </p>
+                        <p>
+                            In the luxury cruise sector, Dan operates dedicated, high-volume audition hubs across the UK and Europe—spanning London, Glasgow, and Paris—delivering world-class performers for global entertainment leaders including Norwegian Cruise Lines, AIDA Cruises, Crystal Cruises, and Holland America Line. His rigorous operational background ensures every casting process is executed with absolute precision.
+                        </p>
                     </div>
-
-                    <div>
-                        <textarea name="message" rows="4" required class="deco-input resize-none" placeholder="Details of correspondence..."></textarea>
-                    </div>
-
-                    <div class="pt-4 text-center">
-                        <button type="submit" class="px-12 py-4 bg-midnight text-pearl font-sans text-xs font-bold tracking-[0.2em] uppercase hover:bg-coral transition-colors shadow-[4px_4px_0px_#DE6B48]">
-                            Send Message
-                        </button>
-                    </div>
-                </form>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- Audition Hubs Section -->
+        <section id="hubs" class="py-20 md:py-32 px-4 sm:px-6 md:px-12 bg-pearl">
+            <div class="max-w-7xl mx-auto flex flex-col justify-center h-full">
+                <div class="text-center mb-16 md:mb-24 reveal">
+                    <h2 class="font-deco text-4xl md:text-5xl font-bold uppercase tracking-widest text-midnight mb-6">Audition Hubs</h2>
+                    <div class="w-16 h-1 bg-coral mx-auto"></div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-12 md:gap-16 text-center">
+                    <div class="reveal">
+                        <div class="w-24 h-24 md:w-32 md:h-32 mx-auto mb-6 md:mb-8 rounded-full border-[6px] border-seafoam p-2">
+                            <div class="w-full h-full bg-midnight rounded-full flex items-center justify-center text-pearl font-deco text-2xl md:text-3xl font-bold">LON</div>
+                        </div>
+                        <h3 class="font-deco text-2xl md:text-3xl font-bold uppercase mb-2">London</h3>
+                    </div>
+
+                    <div class="reveal md:delay-100">
+                        <div class="w-24 h-24 md:w-32 md:h-32 mx-auto mb-6 md:mb-8 rounded-full border-[6px] border-brass p-2">
+                            <div class="w-full h-full bg-midnight rounded-full flex items-center justify-center text-pearl font-deco text-2xl md:text-3xl font-bold">PAR</div>
+                        </div>
+                        <h3 class="font-deco text-2xl md:text-3xl font-bold uppercase mb-2">Paris</h3>
+                    </div>
+
+                    <div class="reveal md:delay-200">
+                        <div class="w-24 h-24 md:w-32 md:h-32 mx-auto mb-6 md:mb-8 rounded-full border-[6px] border-coral p-2">
+                            <div class="w-full h-full bg-midnight rounded-full flex items-center justify-center text-pearl font-deco text-2xl md:text-3xl font-bold">MCR</div>
+                        </div>
+                        <h3 class="font-deco text-2xl md:text-3xl font-bold uppercase mb-2">Manchester</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Selected Credits Section -->
+        <section id="credits" class="py-20 md:py-32 px-4 sm:px-6 md:px-12 bg-sand">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16 md:mb-20 reveal">
+                    <h2 class="font-deco text-4xl md:text-5xl font-bold tracking-widest uppercase mb-4 md:mb-6 text-midnight">Selected Credits</h2>
+                    <div class="deco-line mb-4">
+                        <span></span><div></div><span></span>
+                    </div>
+                </div>
+
+                <!-- Dynamic Gallery Grid -->
+                <div id="dynamic-credits-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
+                    <!-- Items injected here automatically as rectangles -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Highlights Reel (Replaced Experience CV) -->
+        <section id="experience" class="py-20 md:py-32 px-4 sm:px-6 md:px-12 bg-midnight text-pearl relative border-y-8 border-seafoam">
+            <div class="max-w-6xl mx-auto relative z-10">
+                <div class="text-center mb-16 md:mb-24 reveal">
+                    <h2 class="font-deco text-4xl md:text-5xl font-bold tracking-widest uppercase mb-4 md:mb-6 text-pearl">Career Highlights</h2>
+                    <div class="w-16 h-1 bg-coral mx-auto"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                    <!-- Highlight: Casting -->
+                    <div class="reveal deco-border border-pearl bg-midnight shadow-[8px_8px_0px_#7EAC9A] p-6 md:p-10">
+                        <h3 class="font-deco text-2xl md:text-3xl font-bold uppercase mb-2">Debbie O'Brien Casting</h3>
+                        <p class="font-sans text-xs md:text-sm uppercase tracking-[0.2em] font-bold text-coral mb-6">Associate Casting Director &bull; London</p>
+                        <p class="font-sans text-sm font-light opacity-90 mb-6 leading-relaxed">Casting for the West End, UK & International touring, and luxury cruise sectors.</p>
+                        <div class="space-y-4 font-sans text-sm font-light opacity-90">
+                            <div><strong class="text-seafoam uppercase tracking-wider text-xs block mb-1">West End</strong> Thriller Live, Priscilla Queen of the Desert, The Snowman, Priscilla The Party</div>
+                            <div><strong class="text-seafoam uppercase tracking-wider text-xs block mb-1">International & Tours</strong> Burn the Floor, Starlight Express (Bochum), JPG Fashion Freak Show</div>
+                            <div><strong class="text-seafoam uppercase tracking-wider text-xs block mb-1">Cruise Hubs</strong> AIDA Cruises, Norwegian Cruise Lines, Crystal Cruises, Holland America Line</div>
+                        </div>
+                    </div>
+
+                    <!-- Highlight: Producing -->
+                    <div class="reveal md:delay-100 deco-border border-pearl bg-midnight shadow-[8px_8px_0px_#DE6B48] p-6 md:p-10">
+                        <h3 class="font-deco text-2xl md:text-3xl font-bold uppercase mb-2">Sterling Paris</h3>
+                        <p class="font-sans text-xs md:text-sm uppercase tracking-[0.2em] font-bold text-seafoam mb-6">Producing & General Management</p>
+                        <p class="font-sans text-sm font-light opacity-90 mb-6 leading-relaxed">Producing, general management, and consulting for commercial theatrical productions.</p>
+                        <ul class="font-sans text-sm font-light space-y-3 opacity-90">
+                            <li><strong class="text-coral">Producer:</strong> Stand Up Londres</li>
+                            <li><strong class="text-coral">General Manager:</strong> The Standard Short Long Drop</li>
+                            <li><strong class="text-coral">Associate General Manager:</strong> Starcrossed</li>
+                            <li><strong class="text-coral">Commercial Consultant:</strong> Mamma Mia! The Party</li>
+                        </ul>
+                    </div>
+
+                    <!-- Highlight: Disneyland Paris -->
+                    <div class="reveal deco-border border-pearl bg-midnight shadow-[8px_8px_0px_#D4AF37] p-6 md:p-10">
+                        <h3 class="font-deco text-2xl md:text-3xl font-bold uppercase mb-2">Disneyland Paris</h3>
+                        <p class="font-sans text-xs md:text-sm uppercase tracking-[0.2em] font-bold text-brass mb-6">Financial Analyst &bull; Paris</p>
+                        <p class="font-sans text-sm font-light opacity-90 mb-6 leading-relaxed">Over a decade of financial analysis, budgeting, and operational oversight within the resort.</p>
+                        <ul class="font-sans text-sm font-light space-y-3 opacity-90">
+                            <li><strong class="text-brass">Portfolios:</strong> Hotels Division & Disney Village</li>
+                            <li><strong class="text-brass">Special Projects:</strong> Buffalo Bill's Wild West Show</li>
+                            <li><strong class="text-brass">Committees:</strong> Finance Innovation Committee</li>
+                        </ul>
+                    </div>
+
+                    <!-- Highlight: Performance -->
+                    <div class="reveal md:delay-100 deco-border border-pearl bg-midnight shadow-[8px_8px_0px_#F0EAD6] p-6 md:p-10">
+                        <h3 class="font-deco text-2xl md:text-3xl font-bold uppercase mb-2">Other Experience</h3>
+                        <p class="font-sans text-xs md:text-sm uppercase tracking-[0.2em] font-bold text-pearl mb-6">Creative & Communications</p>
+                        <ul class="font-sans text-sm font-light space-y-6 opacity-90">
+                            <li>
+                                <strong class="text-seafoam uppercase tracking-wider text-xs block mb-1">Freelance Producer</strong>
+                                Early career independent producing and management.
+                            </li>
+                            <li>
+                                <strong class="text-seafoam uppercase tracking-wider text-xs block mb-1">Press & Publicity Coordinator</strong>
+                                The Gordon Craig Theatre.
+                            </li>
+                            <li>
+                                <strong class="text-seafoam uppercase tracking-wider text-xs block mb-1">Voice Actor</strong>
+                                English and French voiceover artist (Paris).
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 md:py-32 px-4 sm:px-6 md:px-12 bg-sand">
+            <div class="max-w-4xl mx-auto flex flex-col justify-center h-full">
+                <div class="deco-border bg-white shadow-[8px_8px_0px_#1A2A3A] md:shadow-[12px_12px_0px_#1A2A3A]">
+                    <div class="text-center mb-10 md:mb-16 reveal">
+                        <h2 class="font-deco text-3xl md:text-5xl font-bold uppercase tracking-tight mb-4 text-midnight">
+                            Contact
+                        </h2>
+                        <div class="deco-line mb-6">
+                            <span></span><div></div><span></span>
+                        </div>
+                        <p class="font-sans text-sm text-midnight/70 font-light max-w-md mx-auto px-4">
+                            Get in touch below!
+                        </p>
+                    </div>
+
+                    <div class="reveal delay-100 px-2 sm:px-4 md:px-12 pb-4 md:pb-8">
+                        <form action="https://api.web3forms.com/submit" method="POST" class="space-y-6 md:space-y-8">
+                            <input type="hidden" name="access_key" value="05261b2c-45de-41d0-b402-1c4d9bfe3399">
+                            <input type="hidden" name="subject" value="New Inquiry">
+                            <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                                <div><input type="text" name="name" required class="deco-input" placeholder="Full Name"></div>
+                                <div><input type="text" name="company" class="deco-input" placeholder="Company / Production"></div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                                <div><input type="email" name="email" required class="deco-input" placeholder="Email Address"></div>
+                                <div>
+                                    <select name="subject" class="deco-input cursor-pointer" required>
+                                        <option value="" disabled selected>Location</option>
+                                        <option value="London">London</option>
+                                        <option value="Paris">Paris</option>
+                                        <option value="Manchester">Manchester</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <textarea name="message" rows="5" required class="deco-input resize-none" placeholder="Details of correspondence..."></textarea>
+                            </div>
+
+                            <div class="pt-2 md:pt-4 text-center">
+                                <button type="submit" class="w-full sm:w-auto px-10 py-4 bg-midnight text-pearl font-sans text-xs font-bold tracking-[0.2em] uppercase hover:bg-coral transition-colors shadow-[4px_4px_0px_#DE6B48]">
+                                    Send Message
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
 
     <!-- Footer -->
-    <footer class="py-16 px-6 bg-pearl border-t-2 border-midnight text-center">
-        <div class="flex justify-center space-x-8 mb-8">
+    <footer class="py-10 md:py-12 px-6 bg-pearl border-t-2 border-midnight text-center mt-auto">
+        <div class="flex justify-center space-x-6 md:space-x-8 mb-6 md:mb-8">
             <a href="https://www.linkedin.com/in/dan-blumenau" target="_blank" class="w-10 h-10 border-2 border-midnight flex items-center justify-center text-midnight hover:bg-midnight hover:text-pearl transition-all">
                 <span class="sr-only">LinkedIn</span>
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
@@ -509,32 +456,27 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
             </a>
         </div>
-        <p class="font-sans text-xs font-bold tracking-[0.2em] uppercase text-midnight">&copy; <span id="year"></span> DAN BLUMENAU.</p>
+        <p class="font-sans text-[0.65rem] md:text-xs font-bold tracking-[0.2em] uppercase text-midnight">&copy; <span id="year"></span> DAN BLUMENAU.</p>
     </footer>
 
     <!-- Scripts -->
     <script>
         // ==========================================
         // DYNAMIC CONFIGURATION
-        // Add your local image paths to the array below. 
-        // The script automatically reads the file name, removes the hyphens, 
-        // and uses it as the formatted title below the image.
         // ==========================================
         
-  const creditImages = [
-            "images/Anne-Boleyn-The-Musical.jpg",
-            "images/Starlight-Express-(Bochum).jpg",
-            "images/The-Snowman.jpg",
+        // Reordered exactly to Robyn's "Most Prestigious First" hierarchy
+        const creditImages = [
             "images/Thriller-Live.jpg",
-            "images/Norwegian-Cruise-Lines.jpg",
+            "images/Starlight-Express-(Bochum).jpg",
             "images/Priscilla-Queen-of-the-Desert.jpg",
+            "images/The-Snowman.jpg",
+            "images/Anne-Boleyn-The-Musical.jpg",
             "images/Jean-Paul-Gaultier's-Fashion-Freak-Show.jpg",
+            "images/Norwegian-Cruise-Lines.jpg",
             "images/AIDA-Cruises.jpg"
-            // To add more, just add a comma to the line above and drop the next path below:
-            // "images/Anne-Boleyn-The-Musical.jpg"
         ];
 
-        // Your bio headshot URL
         const HEADSHOT_URL = "images/dan-blumenau.jpg";
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -551,36 +493,32 @@
                 });
             }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-            // 3. Generate Dynamic Gallery from Array
+            // 3. Generate Rectangular Dynamic Gallery
             function buildDynamicGallery() {
                 const galleryGrid = document.getElementById('dynamic-credits-grid');
                 if (!galleryGrid) return;
 
                 creditImages.forEach((imagePath, index) => {
-                    // Extract filename without extension (e.g., "Priscilla-Queen-of-the-Desert")
                     const fileName = imagePath.split('/').pop().split('.')[0];
-                    
-                    // Replace hyphens and underscores with spaces for the title
                     const title = fileName.replace(/[-_]/g, ' '); 
 
-                    // Calculate Art Deco staggered layout & animation delays
                     let delayClass = '';
-                    if (index % 4 === 1) delayClass = 'delay-100';
-                    if (index % 4 === 2) delayClass = 'delay-200';
-                    if (index % 4 === 3) delayClass = 'delay-300';
+                    if (index % 4 === 1) delayClass = 'md:delay-100';
+                    if (index % 4 === 2) delayClass = 'md:delay-200';
+                    if (index % 4 === 3) delayClass = 'md:delay-300';
 
+                    // Keeping slight stagger layout to retain the design flair with rectangles
                     let mtClass = '';
-                    if (index % 4 === 1 || index % 4 === 3) mtClass = 'lg:mt-12';
+                    if (index % 4 === 1 || index % 4 === 3) mtClass = 'lg:mt-8';
 
-                    // Fallback to placeholder if local image isn't found
                     const fallbackImg = "https://images.unsplash.com/photo-1542385262-cea68cebe00b?q=80&w=800&auto=format&fit=crop&grayscale";
 
                     const itemHTML = `
                         <div class="reveal ${delayClass} group text-center cursor-default ${mtClass}">
-                            <div class="arch-img aspect-[2/3] mb-6 shadow-xl">
+                            <div class="poster-container mb-4 md:mb-6 shadow-xl aspect-[2/3]">
                                 <img src="${imagePath}" alt="${title}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='${fallbackImg}';">
                             </div>
-                            <h3 class="font-deco text-xl font-bold uppercase mb-2">${title}</h3>
+                            <h3 class="font-deco text-lg md:text-xl font-bold uppercase mb-2 px-2">${title}</h3>
                         </div>
                     `;
                     
