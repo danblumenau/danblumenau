@@ -63,15 +63,18 @@
         .deco-border {
             position: relative;
             border: 1px solid #1A2A3A;
-            padding: 1.25rem;
+            padding: 2rem 1.25rem;
         }
         @media (min-width: 768px) {
-            .deco-border { padding: 2rem; }
+            .deco-border { padding: 3rem 2.5rem; }
         }
         
         .deco-border::before {
             content: ''; position: absolute; top: 6px; left: 6px; right: 6px; bottom: 6px;
             border: 1px solid rgba(26, 42, 58, 0.2); pointer-events: none;
+        }
+        @media (min-width: 768px) {
+            .deco-border::before { top: 8px; left: 8px; right: 8px; bottom: 8px; }
         }
 
         .deco-line {
@@ -99,20 +102,6 @@
         .group:hover .poster-container img {
             transform: scale(1.05);
             filter: sepia(0%) contrast(1.1);
-        }
-
-        /* Headshot Specific */
-        .headshot-container {
-            border: 4px solid #DE6B48;
-            padding: 0.5rem;
-            position: relative;
-        }
-        .headshot-inner {
-            overflow: hidden;
-            width: 100%;
-            height: 100%;
-            border: 2px solid #1A2A3A;
-            isolation: isolate;
         }
 
         /* Form Inputs - Mobile Safari Fixes */
@@ -152,6 +141,14 @@
         ::-webkit-scrollbar-track { background: #FDFBF7; }
         ::-webkit-scrollbar-thumb { background: #7EAC9A; }
         ::-webkit-scrollbar-thumb:hover { background: #DE6B48; }
+
+        .film-grain {
+            position: absolute;
+            inset: 0;
+            opacity: 0.06;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-coral selection:text-pearl flex flex-col min-h-screen">
@@ -197,34 +194,72 @@
     <main class="flex-grow pt-[72px]">
 
         <!-- Hero Section -->
-        <section id="home" class="min-h-[calc(100svh-72px)] flex flex-col justify-center items-center px-4 md:px-6 py-16 relative">
-            <!-- Deco Geometric Corner Accents -->
-            <div class="hidden md:block absolute top-16 left-8 md:left-16 w-16 h-16 border-t-2 border-l-2 border-midnight/20"></div>
-            <div class="hidden md:block absolute top-16 right-8 md:right-16 w-16 h-16 border-t-2 border-r-2 border-midnight/20"></div>
-            <div class="hidden md:block absolute bottom-16 left-8 md:left-16 w-16 h-16 border-b-2 border-l-2 border-midnight/20"></div>
-            <div class="hidden md:block absolute bottom-16 right-8 md:right-16 w-16 h-16 border-b-2 border-r-2 border-midnight/20"></div>
+        <section id="home" class="min-h-[calc(100svh-72px)] flex items-center justify-center p-0 relative w-full overflow-hidden bg-pearl">
+            
+            <!-- Dramatic Vignette & Film Grain -->
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(26,42,58,0.15)_100%)] pointer-events-none z-0"></div>
+            <div class="film-grain z-0"></div>
 
-            <div class="w-full max-w-5xl mx-auto text-center reveal deco-border bg-white shadow-[6px_6px_0px_#D4AF37] md:shadow-[8px_8px_0px_#D4AF37]">
-                <p class="font-sans text-[0.65rem] sm:text-xs md:text-sm uppercase tracking-[0.2em] sm:tracking-[0.3em] text-coral font-bold mb-4 md:mb-6">
-                    LONDON | PARIS | MANCHESTER
-                </p>
+            <!-- ========================================== -->
+            <!-- MOBILE HERO VERSION (CINEMATIC POSTER)     -->
+            <!-- ========================================== -->
+            <div class="md:hidden flex flex-col justify-between items-center w-full min-h-[calc(100svh-72px)] py-16 px-6 relative z-10">
                 
-                <h1 class="font-deco text-5xl sm:text-6xl md:text-[7rem] leading-[0.9] tracking-tighter uppercase mb-4 md:mb-6 text-midnight break-words">
-                    Dan<br/>Blumenau
-                </h1>
+                <!-- Top Anchorage -->
+                <div class="w-full text-center mt-4">
+                    <!-- pl-[0.4em] perfectly optically centers text with tracking-[0.4em] -->
+                    <p class="font-sans text-[0.65rem] uppercase tracking-[0.4em] text-coral font-bold pl-[0.4em]">
+                        London <span class="text-brass mx-1">✦</span> Paris <span class="text-brass mx-1">✦</span> Manchester
+                    </p>
+                </div>
                 
-                <div class="deco-line mb-6 md:mb-8">
-                    <span></span><div></div><span></span>
+                <!-- Center Typography (Perfectly Centered) -->
+                <div class="flex flex-col items-center justify-center w-full flex-grow px-2">
+                    <h1 class="font-deco text-[14.5vw] leading-[0.85] tracking-tight uppercase text-midnight text-center w-full mt-4">
+                        Dan<br/>Blumenau
+                    </h1>
                 </div>
 
-                <p class="font-sans text-sm md:text-lg text-midnight font-medium uppercase tracking-widest max-w-2xl mx-auto mb-6 px-2 md:px-4">
-                    Casting Director
-                </p>
+                <!-- Bottom Anchorage (Classic Billing Block Style) -->
+                <div class="w-full flex flex-col items-center mb-4">
+                    <div class="flex items-center justify-center gap-6 w-full max-w-[200px] mb-6">
+                        <div class="h-[1px] bg-midnight/30 flex-grow"></div>
+                        <div class="w-1.5 h-1.5 transform rotate-45 bg-brass"></div>
+                        <div class="h-[1px] bg-midnight/30 flex-grow"></div>
+                    </div>
+                    <h2 class="font-sans text-[0.75rem] font-bold uppercase tracking-[0.4em] text-midnight text-center pl-[0.4em]">
+                        Casting Director
+                    </h2>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- DESKTOP HERO VERSION (CINEMATIC WIDESCREEN)-->
+            <!-- ========================================== -->
+            <div class="hidden md:flex flex-col justify-between items-center w-full h-full relative z-10 pt-20 pb-16 px-8">
                 
-                <div class="flex flex-col sm:flex-row justify-center gap-4 px-2">
-                    <a href="#bio" class="px-6 py-4 md:px-8 bg-midnight text-pearl font-sans text-xs font-bold tracking-[0.2em] uppercase hover:bg-coral transition-colors">
-                        Read Biography
-                    </a>
+                <div class="w-full text-center mt-8">
+                    <p class="font-sans text-[0.7rem] uppercase tracking-[0.6em] text-coral font-bold pl-[0.6em]">
+                        London <span class="text-brass mx-3">✦</span> Paris <span class="text-brass mx-3">✦</span> Manchester
+                    </p>
+                </div>
+                
+                <!-- Center Typography (Perfectly Centered Widescreen) -->
+                <div class="flex flex-col items-center justify-center w-full max-w-5xl flex-grow">
+                    <h1 class="font-deco text-[8rem] lg:text-[10rem] leading-[0.85] tracking-tighter uppercase text-midnight text-center w-full mt-8">
+                        Dan<br/>Blumenau
+                    </h1>
+                </div>
+
+                <div class="w-full flex flex-col items-center mb-8">
+                    <div class="flex items-center justify-center gap-8 w-full max-w-[320px] mb-8">
+                        <div class="h-[1px] bg-midnight/30 flex-grow"></div>
+                        <div class="w-2.5 h-2.5 transform rotate-45 bg-brass"></div>
+                        <div class="h-[1px] bg-midnight/30 flex-grow"></div>
+                    </div>
+                    <p class="font-sans text-sm font-bold uppercase tracking-[0.5em] text-midnight text-center pl-[0.5em]">
+                        Casting Director
+                    </p>
                 </div>
             </div>
         </section>
@@ -236,9 +271,9 @@
 
             <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16 items-center relative z-10">
                 <div class="lg:col-span-5 reveal">
-                    <div class="headshot-container aspect-[3/4] max-w-[280px] sm:max-w-md mx-auto bg-pearl shadow-[8px_8px_0px_#1A2A3A] md:shadow-[12px_12px_0px_#1A2A3A]">
-                        <div class="headshot-inner bg-midnight">
-                            <img id="img-headshot" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" alt="Dan Blumenau" class="w-full h-full object-cover">
+                    <div class="mx-auto max-w-[260px] sm:max-w-[320px] md:max-w-sm lg:max-w-md aspect-[3/4] bg-pearl p-2 md:p-3 border-[4px] border-coral shadow-[8px_8px_0px_#1A2A3A] md:shadow-[12px_12px_0px_#1A2A3A] flex">
+                        <div class="flex-1 border-[2px] border-midnight overflow-hidden relative bg-midnight">
+                            <img id="img-headshot" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" alt="Dan Blumenau" class="absolute inset-0 w-full h-full object-cover">
                         </div>
                     </div>
                 </div>
